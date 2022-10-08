@@ -5,4 +5,9 @@ Steps to run sock_example.c:
 4) To run and get results: "sudo ./sock_example"
 5) "make clean"
 
-Note: In order to get verifier error log for unsafe programs you can uncomment line 57 in sock_example.c. 
+Note: In order to get verifier error log for unsafe programs you can uncomment line 57 in sock_example.c.
+
+Information about machine where this code executed:
+OS Name: Ubuntu 20.04.3 LTS
+OS Type: 64-bit
+Kernel release version: 5.11.0-44-generic
