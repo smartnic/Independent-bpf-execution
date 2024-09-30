@@ -1,6 +1,9 @@
-Steps to run sock_example.c:
+### Dependencies
+Using the version of libbpf.a in this folder requires installing the package `libelf-dev`
+
+### Steps to run sock_example.c:
 1) Input.txt should contain the code to insert in the 'struct bpf_insn prog []' of sock_example.c. This is the main bpf program. Currently Input.txt contains what was there in the struct for the original sock_example.c.
-2) In the Makefile make sure to change "path to libbpf.a" to the path, on your machine, of the libbpf.a file in this folder.
+2) In the Makefile, make sure to change "path to libbpf.a" to the path, on your machine, of the libbpf.a file in this folder. The current Makefile includes the path to the local libbpf.a in this repository.
 3) To compile: "make"
 4) To run and get results: "sudo ./sock_example"
 5) "make clean"
