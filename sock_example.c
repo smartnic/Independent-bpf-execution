@@ -1,11 +1,18 @@
 /* eBPF example program:
  * - creates arraymap in kernel with key 4 bytes and value 8 bytes
+ * 
+ * - updates map in kernel with key 255 mapping to the value "%lld"
  *
  * - loads eBPF program:
+ *   r0 = 255;
+ *   *(u32*)(fp-4) = r0;
+ *   value = bpf_map_lookup_elem(map_fd, fp-4);
+ *   if(value)
+ *   	bpf_trace_printk(value, 8, bpf_ktime_get_ns());
  *   r0 = skb->data[ETH_HLEN + offsetof(struct iphdr, protocol)];
- *   *(u32*)(fp - 4) = r0;
+ *   *(u32*)(fp - 8) = r0;
  *   // assuming packet is IPv4, lookup ip->proto in a map
- *   value = bpf_map_lookup_elem(map_fd, fp - 4);
+ *   value = bpf_map_lookup_elem(map_fd, fp - 8);
  *   if (value)
  *        (*(u64*)value) += 1;
  *
@@ -36,9 +43,18 @@ static int test_sock(void)
 {
 	int sock = -1, map_fd, prog_fd, i, key;
 	long long value = 0, tcp_cnt, udp_cnt, icmp_cnt;
-
+	int keys = 0xff;
 	map_fd = bpf_create_map(BPF_MAP_TYPE_ARRAY, sizeof(key), sizeof(value),
 				256, 0);
+	char inputString[4] = "%lld";
+	int a = bpf_map_update_elem(map_fd, &keys, &inputString, BPF_ANY);
+	/*
+	char outputString[4]
+	bpf_map_lookup_elem(map_fd, &keys, outputString);
+	printf("%d %s\n",keys, outputString);
+	perror("Errors: \n");
+	printf("%d\n",a);
+	*/
 	if (map_fd < 0) {
 		printf("failed to create map '%s'\n", strerror(errno));
 		goto cleanup;
